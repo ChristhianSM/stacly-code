@@ -130,4 +130,26 @@ header .title{
     color: #172E5F;
 }
 
+@media (max-width : 768px){
+    .container {
+        width: 90%;
+    }
+}
+
+@media (max-width : 425px){
+    .container {
+        width: 90%;
+    }
+
+    .information .container-quotes{
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width : 320px){
+    .information .container-quotes .card-quote .title-quote{
+        width: 80%;
+    }
+}
+
 
