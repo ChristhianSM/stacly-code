@@ -1,8 +1,10 @@
 const formulario = document.querySelector("#formulario");
 const informacion = document.querySelector(".container-quotes");
+const ramdomBtn = document.querySelector('.ramdon');
 
 window.onload = () => {
     formulario.addEventListener('submit', validarFormulario);
+    ramdomBtn.addEventListener('click', buscarRandom);
 }
 
 function validarFormulario(e){
@@ -27,12 +29,29 @@ function buscarQuotes(termino){
         })
 }
 
+function buscarRandom(){
+    const url = `https://quote-garden.herokuapp.com/api/v3/quotes?limit=50`;
+    fetch(url)
+        .then(respuesta => respuesta.json())
+        .then(resultado => {
+            const ramdom = Math.round(Math.random()*50,0);
+            const author = resultado.data[ramdom].quoteAuthor;
+            buscarQuotes(author);
+        })
+    
+}
+
+
 function mostrarQuotes(quotes){
+
+    while(informacion.firstChild){
+        informacion.removeChild(informacion.firstChild)
+    }
+
     const author = quotes[0].quoteAuthor;
     const user = document.querySelector(".user");
     user.textContent = author;
 
-    console.log(quotes)
     quotes.forEach(quote => {
 
         const {quoteText} = quote;
