@@ -1,5 +1,8 @@
+import {buscarQuotes} from './fetch.js';
+
 const formulario = document.querySelector("#formulario");
 const informacion = document.querySelector(".container-quotes");
+const resultado = document.querySelector(".resultado");
 const container = document.querySelector('.container')
 const ramdomBtn = document.querySelector('.ramdon');
 
@@ -19,6 +22,7 @@ function validarFormulario(e){
 
     buscarQuotes(terminoBusqueda);
 }
+
 
 function buscarQuotes(termino){
     const url = `https://quote-garden.herokuapp.com/api/v3/quotes?author=${termino}`;
@@ -123,6 +127,4 @@ function spinner(){
         <div class="sk-chase-dot"></div>
         <div class="sk-chase-dot"></div>
     `
-    informacion.appendChild(spinner);
-
 }
