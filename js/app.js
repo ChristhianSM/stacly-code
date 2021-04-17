@@ -1,4 +1,3 @@
-import {buscarQuotes} from './fetch.js';
 
 const formulario = document.querySelector("#formulario");
 const informacion = document.querySelector(".container-quotes");
