@@ -1,5 +1,6 @@
 const formulario = document.querySelector("#formulario");
 const informacion = document.querySelector(".container-quotes");
+const container = document.querySelector('.container')
 const ramdomBtn = document.querySelector('.ramdon');
 
 window.onload = () => {
@@ -17,19 +18,27 @@ function validarFormulario(e){
     }
 
     buscarQuotes(terminoBusqueda);
-    console.log(terminoBusqueda)
 }
 
 function buscarQuotes(termino){
     const url = `https://quote-garden.herokuapp.com/api/v3/quotes?author=${termino}`;
+
+    spinner();
+
     fetch(url)
         .then(respuesta => respuesta.json())
         .then(resultado => {
-            mostrarQuotes(resultado.data);
+            if (resultado.data.length === 0) {
+                mostrarMensaje("No existen datos, intente buscar a otro autor");
+                formulario.reset();
+            }else{
+                mostrarQuotes(resultado.data);
+            }
         })
 }
 
 function buscarRandom(){
+
     const url = `https://quote-garden.herokuapp.com/api/v3/quotes?limit=50`;
     fetch(url)
         .then(respuesta => respuesta.json())
@@ -44,9 +53,7 @@ function buscarRandom(){
 
 function mostrarQuotes(quotes){
 
-    while(informacion.firstChild){
-        informacion.removeChild(informacion.firstChild)
-    }
+    limpiarHtml();
 
     const author = quotes[0].quoteAuthor;
     const user = document.querySelector(".user");
@@ -54,14 +61,14 @@ function mostrarQuotes(quotes){
 
     quotes.forEach(quote => {
 
-        const {quoteText} = quote;
+        const {quoteText, quoteGenre} = quote;
 
         const card = document.createElement('div');
         card.classList.add('card-quote');
 
         const titleQuote = document.createElement('p');
         titleQuote.classList.add('title-quote');
-        titleQuote.textContent = "Techonoly"
+        titleQuote.textContent = quoteGenre
 
         const parrafoQuote = document.createElement('p');
         parrafoQuote.classList.add('parrafo-quote');
@@ -77,5 +84,45 @@ function mostrarQuotes(quotes){
 }
 
 function mostrarMensaje (mensaje){
+
+    limpiarHtml();
+    const user = document.querySelector('.user');
+    user.textContent = "";
+    const error = document.querySelector('.error');
+    if (!error) {
+        const alerta = document.createElement('p');
+        alerta.classList.add('error');
+        alerta.textContent = mensaje ;
+        container.appendChild(alerta)
+        
+        setTimeout(() => {
+            alerta.remove();
+        }, 3000);
+    }
+}
+
+function limpiarHtml(){
+    
+    while(informacion.firstChild){
+        informacion.removeChild(informacion.firstChild)
+    }
+}
+
+function spinner(){
+    limpiarHtml();
+
+    const spinner = document.createElement('div');
+    spinner.classList.add('sk-chase');
+
+    spinner.innerHTML = 
+    `
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+        <div class="sk-chase-dot"></div>
+    `
+    informacion.appendChild(spinner);
 
 }
